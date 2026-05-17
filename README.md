@@ -13,7 +13,6 @@
 
 **A self-hosted collection of services running on my homelab**
 
-[![Repo size](https://img.shields.io/github/repo-size/julioj3010/homelab?style=for-the-badge)](https://github.com/julioj3010/homelab)
 [![License](https://img.shields.io/badge/license-GPL3-blue?style=for-the-badge)](LICENSE)
 
 </div>
