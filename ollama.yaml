@@ -1,0 +1,66 @@
+# Podman Compose file for Ollama AI/ML model runner
+
+# Usage:
+# podman compose -f ollama.yaml up -d
+# Note: .env file needs to be in the same directory as .yaml file
+
+# GPU:
+# You need to have NVIDIA Container Toolkit installed and running on your system.
+# You also need to have the NVIDIA driver installed on your system.
+
+# Feel free to edit to your own needs.
+
+name: ollama
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - 11434:11434
+    # Comment out the following deploy lines if you don't want to use GPU support.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            # Edit the following line to match your GPU device ID.
+            - capabilities: [gpu]
+              count: 1
+              driver: nvidia
+    volumes:
+      - ollama:/root/.ollama:Z
+    networks:
+      - ollama-net
+    # Uncomment the following lines if you want/need to disable SELinux.
+    #security_opt:
+    #  - label=disable
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - open-webui:/app/backend/data:Z
+    networks:
+      - ollama-net
+    # Uncomment the following lines if you want/need to disable SELinux.
+    #security_opt:
+    #  - label=disable
+    depends_on:
+      - ollama
+
+volumes:
+  ollama:
+    name: ollama
+  open-webui:
+    name: open-webui
+
+networks:
+  ollama-net:
+    name: ollama-bridge-network
+    driver: bridge
