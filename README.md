@@ -32,6 +32,7 @@ This repository contains the Podman Compose configurations for my homelab, inclu
 | 🦙 **Ollama** | AI/ML model runner with Open Web UI Interface
 | 🔍 **SearXNG** | Private search engine
 | 💻 **Forgejo** | Git hosting platform
+| 🎥 **Jellyfin** | Media server
 | 🗄️ **MongoDB** | Database service
 | ☁️ **NextCloud** | Cloud storage & collaboration
 
@@ -84,3 +85,40 @@ This repository contains the Podman Compose configurations for my homelab, inclu
    - Searxng: `http://localhost:8888`
    - Forgejo: `http://localhost:3000`
    - Nextcloud: `http://localhost:8080`
+
+### Auto Start
+
+To ensure that your services start automatically when the system boots, you can enable them using your container runtime's service management capabilities. For example (Fedora Server 44):
+
+#### Enable User Linger
+```
+loginctl enable-linger username
+```
+
+#### Systemd Service File Example
+
+Create a systemd service file for each stack. For example, create a `podman-nextcloud.service` file in `/etc/systemd/user/`.
+
+```
+[Unit]
+Description=Nextcloud Container Stack
+Requires=basic.target
+After=basic.target
+
+[Service]
+Type=idle
+EnvironmentFile=/Path/To/.env
+ExecStart=/usr/bin/podman compose -f /Path/To/nextcloud.yaml up
+KillMode=none
+TimeoutStopSec=60
+
+[Install]
+WantedBy=default.target
+```
+
+#### Reload systemd and Enable Service
+
+```
+systemctl --user daemon-reload
+systemctl --user enable --now nextcloud.service
+```
