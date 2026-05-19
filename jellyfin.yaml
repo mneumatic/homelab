@@ -1,0 +1,27 @@
+name: jellyfin
+
+services:
+  jellyfin:
+    image: docker.io/jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096/tcp"
+      - "7359:7359/udp"
+    user: "1000:1000"
+    volumes:
+      - jellyfin-cache:/cache:Z
+      - jellyfin-config:/config:Z
+      - jellyfin-media:/media:Z
+    labels:
+      - io.containers.autoupdate=registry
+    # Podman-specific: keep user namespace mapping
+    #userns_mode: keep-id
+
+volumes:
+  jellyfin-cache:
+    name: jellyfin-cache
+  jellyfin-config:
+    name: jellyfin-config
+  jellyfin-media:
+    name: jellyfin-media
