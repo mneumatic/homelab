@@ -1,7 +1,8 @@
 # Podman Compose file for SearXNG search engine
 
 # Usage:
-# podman compose -f searxng.yaml up -d
+# podman compose -f--in-pod=0 searxng.yaml up -d
+# Exclude '--in-pod=0' to create pod.
 # Note: .env file needs to be in the same directory as .yaml file
 
 # Feel free to edit to your own needs.
@@ -18,7 +19,14 @@ services:
     volumes:
       - searxng:/etc/searxng:Z
       - searxng:/var/cache/searxng:Z
+    networks:
+      - searxng-net
 
 volumes:
   searxng:
     name: searxng
+
+networks:
+  searxng-net:
+    name: searxng-bridge-network
+    driver: bridge
