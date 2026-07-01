@@ -1,0 +1,30 @@
+# Open WebUI Docker Compose Configuration for Apple Silicon
+
+# This configuration assumes that you have Ollama running on your host machine and accessible at http://host.docker.internal:11434.
+# Ollama can be install via Homebrew with the command: brew install ollama
+
+name: oi
+
+services:
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    volumes:
+      - open-webui:/app/backend/data
+    networks:
+      - ollama-net
+
+volumes:
+  open-webui:
+    name: open-webui
+
+networks:
+  ollama-net:
+    name: oi-bridge-network
+    driver: bridge
