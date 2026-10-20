@@ -1,9 +1,21 @@
-# Jellyfin media server
+# Insure that jellyfin-cache and jellyfin-config are owned by 525287
+# ex: sudo chown -R 525287:525287 ~/.local/share/containers/storage/volumes/jellyfin-cache/
 
-# Usage:
-# podman compose -f --in-pod=0 jellyfin.yaml up -d
-# Exclude '--in-pod=0' to create pod.
-# Note: .env file needs to be in the same directory as .yaml file
+# podman-jellyfin.service
+# [Unit]
+# Description=Jellyfin Container
+# Requires=basic.target
+# After=basic.target
+
+# [Service]
+# Type=idle
+# EnvironmentFile=/home/<username>/.env
+# ExecStart=/usr/bin/podman compose --in-pod=0 -f /home/<username>/jellyfin.yaml up
+# KillMode=none
+# TimeoutStopSec=60
+
+# [Install]
+# WantedBy=default.target
 
 name: jellyfin
 

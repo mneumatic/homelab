@@ -1,0 +1,21 @@
+name: Pi-Hole
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "192.168.6.142:53:53/tcp"
+      - "192.168.6.142:53:53/udp"
+      - "8081:80/tcp"
+      # Uncomment the line below if you use Pi-hole as your DHCP server
+      # - "67:67/udp"
+    environment:
+      TZ: 'America/Los_Angeles'
+      WEBPASSWORD: 'set-a-secure-password'
+      FTLCONF_misc_etc_dnsmasq_d: 'true'
+    volumes:
+      - './pihole/etc-pihole:/etc/pihole:Z'
+      - './pihole/etc-dnsmasq.d:/etc/dnsmasq.d:Z'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
