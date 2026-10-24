@@ -14,8 +14,8 @@ services:
       WEBPASSWORD: 'set-a-secure-password'
       FTLCONF_misc_etc_dnsmasq_d: 'true'
     volumes:
-      - './pihole/etc-pihole:/etc/pihole:Z'
-      - './pihole/etc-dnsmasq.d:/etc/dnsmasq.d:Z'
+      - '$HOME/.config/pihole/etc-pihole:/etc/pihole:Z'
+      - '$HOME/.config/pihole/etc-dnsmasq.d:/etc/dnsmasq.d:Z'
     cap_add:
       - NET_ADMIN
     restart: unless-stopped

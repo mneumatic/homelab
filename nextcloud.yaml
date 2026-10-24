@@ -33,6 +33,7 @@ services:
       retries: 10
     volumes:
       - mariadb-data:/var/lib/mysql:Z
+      - $HOME/.config/nextcloud/custom.cnf:/etc/mysql/conf.d/custom.cnf:Z # Optional: Custom MariaDB configuration file
     networks:
       - nextcloud-net
     # Uncomment the following lines if you want/need to disable SELinux.
