@@ -1,0 +1,16 @@
+[Unit]
+Description=SearXNG Container Service
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/homelab/
+ExecStartPre=-/usr/bin/podman-compose --in-pod=0 -f searxng.yaml down
+ExecStart=/usr/bin/podman-compose --in-pod=0 -f searxng.yaml up
+ExecStop=/usr/bin/podman-compose -f searxng.yaml down
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

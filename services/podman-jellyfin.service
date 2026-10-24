@@ -1,0 +1,18 @@
+[Unit]
+Description=Jellyfin Container
+Requires=basic.target
+After=basic.target
+
+[Service]
+Type=simple
+EnvironmentFile=/path/to/.env
+WorkingDirectory=/path/to/homelab/
+ExecStartPre=-/usr/bin/podman-compose --in-pod=0 -f jellyfin.yaml down
+ExecStart=/usr/bin/podman-compose --in-pod=0 -f jellyfin.yaml up
+ExecStop=/usr/bin/podman-compose -f jellyfin.yaml down
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

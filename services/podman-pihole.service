@@ -1,0 +1,16 @@
+[Unit]
+Description=Pi Hole Container Service
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/homelab/
+ExecStartPre=-/usr/bin/podman-compose --in-pod=0 -f pihole.yaml down
+ExecStart=/usr/bin/podman-compose --in-pod=0 -f pihole.yaml up
+ExecStop=/usr/bin/podman-compose -f pihole.yaml down
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

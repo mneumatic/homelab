@@ -1,0 +1,18 @@
+[Unit]
+Description=Nextcloud Container Stack
+Requires=basic.target
+After=basic.target
+
+[Service]
+Type=simple
+EnvironmentFile=/path/to/.env
+WorkingDirectory=/path/to/homelab/
+ExecStartPre=-/usr/bin/podman-compose -f nextcloud.yaml down
+ExecStart=/usr/bin/podman-compose -f nextcloud.yaml up
+ExecStop=/usr/bin/podman-compose -f nextcloud.yaml down
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
