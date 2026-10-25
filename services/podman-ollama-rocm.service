@@ -1,0 +1,16 @@
+[Unit]
+Description=Ollama Container Service
+After=network-online.target
+
+[Service]
+WorkingDirectory=/var/home/mneumatic/Projects/homelab/
+Type=simple
+ExecStartPre=-/usr/bin/podman-compose -f ollama-rocm.yaml down
+ExecStart=/usr/bin/podman-compose -f ollama-rocm.yaml up
+ExecStop=/usr/bin/podman-compose -f ollama-rocm.yaml down
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
